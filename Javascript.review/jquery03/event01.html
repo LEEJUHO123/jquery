@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+  <script>
+    $(function(){
+
+    // 프로젝트 안에 있는 소스들에 한에서는 속도차가 크게 안나지만 외부에 있는 데이터를 받아올때는 브라우저에서 실제로 뿌려줄때 시간차(로딩)가 걸림
+    // ready -> html 문서 로딩이 완료 후에 동작
+    $(document).ready(function(){
+      let h1 = $('.img1').height(); // 이미지 완료된거랑 무관하게 돌아감
+      console.log("ready : ", h1);
+    });
+  
+    // load -> 외부에 연동된 코드(iframe, img, viedo)의 로딩이 완료된 후에 동작
+    $(window).on('load', function(){
+      var h2 = $('.img1').height();
+      console.log("load : ", h2);
+    });
+
+  });
+  </script>
+  <p>
+    <img src="http://place-hold.it/300x300" class="img1">
+  </p>
+</body>
+</html>

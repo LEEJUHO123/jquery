@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+  <script>
+    $(document).ready(function(){
+      //click 이벤트
+      $('.btn1').click(function(event){ //이벤트때 on을 써도 되지만 하나만 거는거라면 click도 괜찮음
+        //기존 이벤트 동작을 막는 방법1
+        event.preventDefault();
+        $('.txt1').css('background-color', 'green');
+      });
+
+      $('.btn2').on('click', function(){ //on이 더 괜찮은 방법.
+        $('.txt2').css({'border':'1px solid black', 'background-color':'pink'}); // css는 속성과 해당값을 넣는 방식. style속성은 굉장히 많은데 한번에 집어넣고 싶을때는 객체형태로 등록가능
+        //기존 이벤트 동작을 막는 방법2
+        return false; //return false는 form태그나 데이터를 넘겨주는 태그에 있어서 넘겨주기전에 반드시 동작해야하는게 정확하게 동작했는지 확인하기 위해서 많이 사용한다.
+      });
+
+      //dblclick 이벤트
+      $('.btn3').on('dblclick', function(){
+        $('.txt3').css('background-color','blue');
+      });
+
+      //off(이벤트 종류, 선택자, 핸들러)
+      $('.btn3').off('dblclick');
+
+      //이벤트를 강제로 발생
+      $('.btn1').trigger('click');
+      $('.btn2').click();
+
+
+    });
+    
+  </script>
+  <p>
+    <a href="https://www.naver.com" class="btn1">버튼1</a>
+  </p>
+  <p class="txt1">내용1</p>
+  <p><a href="https://www.google.com" class="btn2">버튼2</a></p>
+  <p class="txt2">내용2</p>
+  <p><button class="btn3">버튼3</button></p>
+  <p class="txt3">내용3</p>
+</body>
+</html>
