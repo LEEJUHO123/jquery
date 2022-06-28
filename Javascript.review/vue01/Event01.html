@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      function printMessage(){
+        alert("선택되었습니다.");
+      }
+
+      var v1 = new Vue({
+        el: '#app',
+        data: {
+          num :0,
+          count: 0 ,
+          isClick : false
+        },
+        methods: { //여러개의 메소드를 등록할수있기에 복수로 칭해서 s
+          countUp : function(value){   //function (num)하면 안됨
+            this.count+= value;
+            //호출하는걸 왼쪽에 쓰고 구현해야하는건 펑션으로.
+          // 지금은 1씩 증가하는거니깐 ++(증가연산자)를 사용
+          },
+          oneClick : function(){
+            this.isClick = true;
+            printMessage();
+
+          }
+        }
+      });
+    });
+  </script>
+  <div id="app">
+    <p>{{ count }}</p>
+    <button v-on:click="countUp">1씩 증가</button> <!-- on:다음에 등록하고자하자는 이벤트를 등록하고 클릭시 countUp이랑 연동되는것. -->
+    <button v-on:click="oneClick" v-bind:disabled="isClick">One Click</button>
+    <hr>
+    <label>증가 숫자 : <input v-model.number="num" type="number"></label><br>
+    <button v-on:click="countUp(num)">{{num}}씩 증가</button> <!--countUp(num) 매개변수num에 넘겻음-->
+
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function(){
+      var v2 = new Vue({
+        el : '#app2',
+        data : {
+          myText : ''
+
+        },
+        methods : {
+          showAlert : function(){
+            alert("Enter키를 눌렀습니다.")
+            
+          }
+        }
+      });
+    })
+  </script>
+  <div id="app2">
+    <input v-on:keyup.enter="showAlert" v-model.lazy="myText"> <!-- keyup하면 뭘 누르든간에 이벤트 발생-->
+    <p>{{ myText }}</p>
+  </div>
+</body>
+</html>

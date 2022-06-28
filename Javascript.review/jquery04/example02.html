@@ -13,7 +13,14 @@
 <body>
   <script>
     $(document).ready(function(){
+      selectAllEmployees();
+      formInit('insert');
       
+      $('#job_id').focus(selectJobs);
+      $('#insertBtn').click(insertEmployee);
+      $('#updateBtn').click(updateEmployee);
+      $('#deleteBtn').click(deleteEmployee);
+
       //전체조회
       function selectAllEmployees(){
         $('div:last').empty();
@@ -163,7 +170,20 @@
         url :'http://192.168.0.29/myserver/empDeptJob',
         dataType : 'json',
         success : function(data){
+          let data = reulst['jobs'];
 
+          let selectTag = $('<select/>');
+          $(data).each(function(idx, obj){
+            $(selectTag).append(
+              $('<option/>').val(obj['job_id']).text(obj['job_title'])
+            );
+          });
+
+          $('#job_id').after(selectTag);
+
+          $('select').on('change', function(){
+            $('#job_id').val($(':selected').val());
+          });
         },
         error : function(reject){
           console.log(reject);
