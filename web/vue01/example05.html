@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+  <script>
+    // v-if
+    document.addEventListener('DOMContentLoaded',function(){
+        new Vue({
+        el : '#app',
+        data : {
+          myVisible : false,
+          type : 'A',
+          isShow : true
+        },
+        methods : {
+          choice : function(){
+            this.isShow = true;
+          }
+        }
+      })
+    });
+  </script>
+  <div id="app">
+    <label><input type="checkbox" v-model="myVisible">표시</label>
+    <!-- 태그자체가 사라진다(작업불가능)  false 일때는 이 태그를 비운다-->
+    <p v-if="myVisible" id="test">체크박스가 ON</p> 
+    <p>새로운 p태그</p><!--이렇게 중간에 있으면 if와 else연동이 되지않는다-->
+    <p v-else>체크박스 OFF</p><!--if와 else가 연달아있으면 두개가 연결되어있다-->
+    <br>
+    <br>
+    <p v-if="type=='A'">A</p>
+    <p v-else-if="type =='B'">B</p>
+    <p v-else-if="type =='C'">C</p>
+    <p v-else>기타 : {{ type }}</p>
+    <input v-model="type">
+    <br>
+    <br>
+    <button v-show="isShow" v-on:click="choice">선택</button>
+  </div>
+</body>
+</html>

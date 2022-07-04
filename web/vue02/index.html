@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue.js 애완용품샵</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <link rel="stylesheet" type="text/css" href="assets/css/app.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+  <!-- bootstrap CDN -->
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css"
+    integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"></script>
+</head>
+
+<body>
+<!-- <script>
+  //json 파일에서 데이터를 읽어오고 console 출력
+  fetch('./products.json') // 서버쪽으로 통신하는 url
+  .then(reponse => {return reponse.json();}) //then을 이용하여 1차적으로 json을 파싱
+  .then(data =>{ // 두번째부터 처리.
+    console.log(data);
+  }).catch(err => console.log(err));
+
+  $.ajax({
+      url: 'products.json',
+      dataType: 'json',
+      success: function (data) {
+        console.log(data);
+      },
+      error: function (reject) {
+        console.log(reject);
+      }
+    })
+</script> -->
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var webstore = new Vue({
+        el: '#app',
+        data: {
+          sitename: 'Vues.js 애완용품샵',
+        //  product: [],
+          products: [],
+          // product: {
+          //   id: 1001,
+          //   title: '사자 사료, 25파운드',
+          //   description: '당신의 사자를 위한 <em>거부할 수 없는</em>,' +
+          //     '유기농 25파운드 사료입니다.',
+          //   price: 2000,
+          //   image: 'assets/images/product-fullsize.png',
+          //   stock: 20, // 재고
+          //   rating : 3
+          // },
+          cart: [], // 카트 아이템을 담은 배열을 표시
+          showProduct: true,
+          order : {
+            firstName : '',
+            lastName : '',
+            address : '',
+            city : '',
+            zip : '',
+            state : '',
+            method : '자택주소',
+            business : '직장주소',
+            home : '자택주소',
+            gift : '선물로 보내기',
+            sendGift : '선물로 보내기',
+            dontSendGift : '선물로 보내지 않기'
+          },
+          state : {
+            AL : '알라바마',
+            AK : '알래스카',
+            AR : '애리조나',
+            CA : '캘리포니아',
+            NV : '네바다'
+          }
+        },
+        methods: {
+          addToCart: function (product) {
+            this.cart.push(product.id);
+          },
+          showCheckout: function () { //토글 .. 껐다켰다 가능
+            this.showProduct = this.showProduct ? false : true;
+          },
+          submitForm : function() {
+            alert('구매완료');
+          },
+          checkRating : function(n, product) {
+            return (product.rating - n) >= 0;
+          },
+          canAddToCart: function(product) {
+            return this.cartCount(product.id) < product.stock; //현재 장바구니 안에 들어가있는 ..
+          },
+          cartCount : function(productId){
+            let count = 0;
+            for(let i=0; i < this.cart.length; i++){
+              if(this.cart[i] == productId){
+                count++;
+              }
+            }
+            return count;
+          }
+        },
+        computed: {
+          cartItemCount: function () {
+            return this.cart.length;
+          }
+        },
+        filters: { // 필터는 단독으로 사용이 불가능하다.
+          formatPrice: function (price) { // 이름은 필드처럼 쓰고 내용은 펑션으로 정리
+            if (!parseInt(price)) { return ''; } // 필터는 this로 직접 연결하지 않는다.
+            if (price > 99999) {
+              // $1,000이상의 값
+              var priceString = (price / 100).toFixed(2) //toFixed는 소수점 뒷자리를 제한한다
+              var priceArray = priceString.split('').reverse();
+              var index = 3;
+              while (priceArray.length > index + 3) {
+                priceArray.splice(index + 3, 0, ',');
+                index += 4;
+              }
+              return '$' + priceArray.reverse().join('');
+            } else {
+              return '$' + (price / 100).toFixed(2);
+            }
+          }
+        },
+        created : function(){
+        //json 파일에서 데이터를 읽어오고 console 출력
+       fetch('./products.json') // 서버쪽으로 통신하는 url
+        .then(reponse => {return reponse.json();}) //then을 이용하여 1차적으로 json을 파싱
+        .then(data =>{ // 두번째부터 처리.
+         this.products = data.products;
+        }).catch(err => console.log(err));
+        }
+      })
+    });
+  </script>
+  <div id="app" class="container">
+    <header>
+      <div class="navbar navbar-default">
+        <div class="navbar-header">
+          <h1>{{ sitename }}</h1>
+        </div>
+        <div class="nav navbar-nav navbar-right cart">
+          <button type="button" class="btn btn-default btn-lg" v-on:click="showCheckout()">
+            <span class="glypicon glypicon-shopping-cart">{{ cartItemCount }}</span>
+            <span>🛴체크아웃</span>
+          </button>
+        </div>
+      </div>
+    </header>
+    <main>
+      <div v-if="showProduct">
+        <div class="row product" v-for="product in products">
+          <div class="col-md-4">
+            <!--상품 이미지 출력-->
+            <figure>
+              <img :src="product.image" width="200px">
+            </figure>
+          </div>
+          <div class="col col-expand">
+            <!--상품관련 정보 출력-->
+            <h1 v-text="product.title"></h1>
+            <p v-html="product.description"></p>
+            <!--v-text랑 html이랑 혼동하기 쉬운데 html은 p태그 안에 있는 하위태그를 건듬 태그가 없으면 text로 처리해도 됨-->
+            <p class="price">{{ product.price | formatPrice }}</p>
+          </div>
+          <!--disabled를 사용하여 특정조건이 만족하면 버튼을 비활성화하게 만듬.(css를 없앰)-->
+          <button v-on:click="addToCart(product)" class="btn btn-primary btn-lg" :disabled="!canAddToCart(product)">장바구니 담기</button>
+          <!-- 주의 ! if디렉티브는 나눠지면 연동이 안되기에 중간에 if ~ else-if ~ else 붙여서 쓸것 -->
+          <span class="inventory-message" v-if="(product.stock - cartCount(product.id)) == 0"> 품절 !</span>
+          <span class="inventory-message" v-else-if="(product.stock - cartCount(product.id)) > 5">{{ product.stock - cartCount(product.id) }}
+            남았습니다!!</span>
+          <span class="inventory-message" v-else> 지금 구매하세요 !</span>
+          <div class="rating">
+            <!-- <span v-for="n in 5">★</span> 임시변수 ★와 횟수 5를 정하여 ★이 5개 나온다 index라는 개념은 0부터 시작하지만 그 외의 값은 1부터 시작한다.-->
+            <span v-for="n in 5" :class="{'rating-active' : checkRating(n, product)}">☆</span>
+            <!--임시변수 ★와 횟수 5를 정하여 ★이 5개 나온다 index라는 개념은 0부터 시작하지만 그 외의 값은 1부터 시작한다.-->
+            <!--rating-active에 ''가 있는 이유는 원래는 -를 못쓰는데 ''로 묶어서 한 단어로 만든것.-->
+            <!--{'rating-active' : true }라면 빈 별로 지정해뒀지만 검은별로 나옴.-->
+          </div>
+        </div><!-- end v-for -->
+      </div><!--end v-if-->
+
+      <div v-else class="row">
+        <div class="col-md-10 col-md-offset1">
+          <div class="panel panel-info">
+            <div class="panel-heading">애완용품 체크아웃</div>
+            <div class="panel-body">
+
+              <div class="form-group">
+                <div class="col-md-12">
+                  <h4><strong>정보를 입력하세요</strong></h4>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-md-6">
+                  <strong>이름: </strong>
+                  <input class="form-control" v-model.trim="order.firstName">
+                </div>
+                <div class="col-md-6">
+                  <strong>성: </strong>
+                  <input class="form-control" v-model.trim="order.lasttName">
+                </div>
+              </div>
+
+
+              <div class="form-grop">
+                <div class="col-md-12">
+                  <strong>주소:</strong>
+                </div>
+                <div class="col-md-12">
+                  <input class="form-control" v-model.trim="order.address">
+                </div>
+              </div>
+
+             <div class="form-group">
+                <div class="col-md-12">
+                  <strong>도시</strong>
+                </div>
+                <div class="col-md-12">
+                  <input class="form-control" v-model.trim="order.city">
+                </div>
+             </div>
+
+              <div class="form-group">
+                <div class="col-md-2">
+                  <strong>주소:</strong>
+                  <select class="form-control" v-model="order.state">
+                    <option disabled value="">주</option>
+                    <option v-for="(state, key) in state" :value="state">{{ key }}</option> <!--바인드를 하는데 밸류속성임-->
+                  </select>
+                </div>
+
+              </div>
+              <div class="form-group">
+                <div class="col-md-6 col-md-offset-4">
+                  <strong>우편번호:</strong>
+                  <input class="form-control" type="number" v-model.number="order.zip"> <!--.number 수식어는 v-model 지시자 값을 숫자로 자동 타입변환할때 쓴다.-->
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="col-md-6 boxes">
+                  <input type="checkbox" id="gift" value="true" :true-value="order.sendGift" :false-value="order.dontSendGift" v-model="order.gift">
+                  <!--체크박스는 true와 false값을 가지기에 이런식으로 처리가 가능하다.-->
+                  <label for="gift">선물보내기?</label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="col-md-6 boxes">
+                  <input type="radio" id="home" v-model="order.method" :value="order.home">
+                  <label for="home">자택</label>
+                  <input type="radio" id="business" v-model="order.method" :value="order.business">
+                  <label for="business">직장</label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="col-md-6 "></div>
+                <button type="submit" class="btn btn-primary submit" @click="submitForm()">주문하기</button>
+              </div>
+              <div class="col-md-12 verify">
+                <pre>
+                  이름 : {{ order.firstName }}
+                  성 : {{ order.lasttName }}
+                  주소 : {{ order.address }}
+                  도시 : {{ order.city }}
+                  우편번호 : {{ order.zip }}
+                  주 : {{ order.state }}
+                  배송지 : {{ order.method }}
+                  선물 : {{ order.gift }}
+                </pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+
+</html>

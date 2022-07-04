@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <form onsubmit="return false">
+    <div>
+      <div>
+          <form id="info" onsubmit="return false">
+              <div>
+                  <label for="employee_id">사원번호</label>
+                  <input type="number" id="employee_id" name="employee_id">
+              </div>
+              <div>
+                  <label for="first_name">성</label>
+                  <input type="text" id="first_name"  name="first_name">
+              </div>
+              <div>
+                  <label for="last_name">이름</label>
+                  <input type="text" id="last_name" name="last_name">
+              </div>
+              <div>
+                  <label for="email">이메일</label>
+                  <input type="email" id="email" name="email">
+              </div>
+              <div>
+                  <label for="job_id">직업</label>
+                  <input type="text" id="job_id" name="job_id">
+              </div>
+              <div>
+                  <button type="button" onclick="empInsert()">등록</button>
+                  <button type="button" onclick="empUpdate()">수정</button>
+                  <button type="button" onclick="empDelete()">삭제</button>
+              </div>
+          </form>
+      </div>
+  </div>
+  <hr>
+<div>
+  <div>
+    <label for="empId">사원검색</label>
+    <input type="number" id="empId" name="empId" placeholder="공백은 전체 검색">
+    <button type="button" onclick="empSelect()">검색</button>
+
+</div>
+<table>
+  <thead>
+    <tr id="head">
+    
+    </tr>
+  </thead>
+  <tbody id="body">
+
+  </tbody>
+</table>
+</div>
+<script>
+  $(document).ready(function(){
+    empSelect();
+  });
+
+  function empSelect(){
+    let empId = $("#empId").val();
+  }
+
+ 
+</script>
+  </form>
+  
+</body>
+</html>

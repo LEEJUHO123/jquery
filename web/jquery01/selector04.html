@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+  <div>
+    <h1>탐색 선택자</h1>
+    <ul id="menu">
+      <li>내용1</li>
+      <li>내용2</li>
+      <li>내용3</li>
+      <li>내용4</li>
+      <li>내용5</li>
+    </ul>
+  </div>
+  <script>
+   //first, last
+   $('#menu li:first').text("first 변경");
+   $('li').first().css("color", "red");
+   
+   $('#menu li:last').text("last 변경");
+   $('#menu li').last().css("color", "blue");
+   
+   //even : 홀수번째 요소, odd : 짝수번째 요소
+   let evenTag = $('menu li:odd');
+   for(let i=0; i<evenTag.length; i++){
+    $(evenTag[i]).text(2*i);
+   }
+
+   // eq(), lt(), gt() -> 인덱스를 이용
+   $('#menu li:eq(3)').text("내용을 수정합니다.");
+   $('#menu li').eq(3).css("color", "orange");
+   
+   $('li:lt(2)').text("lt에 해당");
+
+  </script>
+  <div>
+    <h1>탐색 선택자 2</h1>
+    <ul>
+      <ol>
+      <li>내용 1-1</li>
+      <li>내용 1-2</li>
+      <li>내용 1-3</li>
+    </ol>
+    </ul>
+    <ul>
+      <ol>
+      <li>내용 2-1</li>
+      <li>내용 2-2</li>
+      <li>내용 2-3</li>
+    </ol>
+    </ul>
+  </div>
+  <script>
+    //first-of-type, last-of-type
+    $('li:first-of-type').text("첫번째");
+    $('li:last-of-type').text("마지막");
+
+    //nth-child, nth-last-of-type
+    $('li:nth-child(1)').text("nth-child 첫번째");
+    $('li:nth-child(2n)').css("border", "1px solid black");
+    // $('li:nth-last-of-type(3)').text("마지막 무리 3번쨰");
+
+    //only-child, slice(start index, end index)
+    $('li:only-child').text("자식요소");
+
+    $('ol li').slice(1,3).css("background-color","pink")  //slice는 1~ 3앞까지
+  </script>
+</body>
+</html>

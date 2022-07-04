@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+</head>
+<body>
+  <script>
+    document.addEventListener("DOMContentLoaded",function(){
+      let v1 = new Vue({
+        el : 'div',
+        data : {
+          num1 : 0,
+          num2 : 0,
+          answer : 0
+        },
+        methods : {
+          add : function(value1,value2){
+            this.answer = value1 + value2;
+          },
+          subtract : function(value1,value2) {
+            this.answer = value1 - value2;
+          },multiply : function(value1,value2){
+            this.answer = value1 * value2;
+          },divide : function(value1,value2){
+            this.answer = value1 / value2;
+          }
+          
+        }
+      })
+    })
+  </script>
+  <div>
+    <h1>간단한 계산기</h1>
+    <input v-model.number ="num1">
+    <input v-model.number ="num2">
+    <button v-on:click="add(num1,num2)">+계산</button>
+    <button v-on:click="subtract(num1,num2)">-계산</button>
+    <button v-on:click="multiply(num1,num2)">*계산</button>
+    <button v-on:click="divide(num1,num2)">/계산</button>
+    <p>{{ answer }}<!-- 4 입니다. --></p>
+  </div>
+</body>
+</html>

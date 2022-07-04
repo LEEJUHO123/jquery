@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <ul>
+    <li id="apple">Apple</li>
+    <li id="apple">Banana</li>
+    <li id="apple">Orange</li>
+  </ul>
+  <script>
+    let ulTag = document.getElementsByTagName('ul')[0];   //이렇게 하나만 잇을때는 이렇게 가져와도됨
+    let liTag = document.createElement('li');
+    liTag.innerText = "추가";
+    ulTag.appendChild(liTag);
+
+
+    document.getElementsByClassName("class");  //배 to the 열로 반환
+    
+  </script>
+  
+</body>
+</html>

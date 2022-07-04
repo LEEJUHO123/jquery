@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+  <script>
+    document.addEventListener('DOMContentLoaded', function(){
+      let v1 = new Vue({
+        el : '#ex1',
+        data : {
+          myName : '',
+          myAddress : '',
+          technologyStack : [],
+          raidoData : [],
+          txt : ''
+
+        },
+        computed : {
+          skillList : function(){
+            let result ='';
+            for(let i =0; i<this.technologyStack.length; i++){
+              result += this.technologyStack[i] + " ,";
+            }
+            return result;
+          }
+        }
+      });
+    });
+  </script>
+  <div id="ex1">
+    <h1>입력폼 활용</h1>
+    <label>이름 : <input type="text" v-model="myName"></label><br>
+    <label>사는곳 : <input type="text" v-model="myAddress"></label><br>
+    기술스택<br>
+    <div>
+      <label><input type="checkbox" v-model="technologyStack" value="자바">Java</label>
+      <label><input type="checkbox" v-model="technologyStack" value="자바스크립트">Javascript</label>
+      <label><input type="checkbox" v-model="technologyStack" value="c, c++">c, c++</label>
+      <label><input type="checkbox" v-model="technologyStack" value="고(GO)">go</label>
+      <label><input type="checkbox" v-model="technologyStack" value="파이썬">python</label>
+    </div>
+    지원분야 :
+    <div>
+      <label><input type="radio" v-model="raidoData" value="프론트엔드">Font</label>
+      <label><input type="radio" v-model="raidoData" value="백엔드">Back</label>
+      <label><input type="radio" v-model="raidoData" value="풀스택">Full</label>
+    </div>
+    <textarea v-model.lazy="txt"></textarea>
+    <p>저는 [{{myName}}] 이고 사는 곳은 [{{myAddress}}]이며, 기술스택은 {{skillList}}이고 지원분야는 {{raidoData}}입니다. 하고싶은 말은 [{{txt}}] 입니다.</p>
+  </div>
+</body>
+</html>
