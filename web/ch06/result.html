@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ch06/ajax.html</title>
+  <script>
+    let xhtp = new XMLHttpRequest();
+    xhtp.open('GET', 'MOCK_DATA.json');
+    xhtp.send();
+
+    xhtp.onload = function(){
+      let result = JSON.parse(xhtp.responseText); // json -> object.
+      console.log(result);
+      let ul = document.createElement('ul'); // <ul></ul>
+      result.forEach(function(el){
+        let li = document.createElement('li');
+        li.innerText = el.first_name +', '+el.email;    // 속성일 때는 = 를 씀 함수는 ()
+        ul.append(li); // <ul><li> ?? </li><li> ?? </li> ... </ul>
+      });
+      document.body.append(ul);
+    }
+  </script>
+</head>
+<body>
+  
+</body>
+</html>

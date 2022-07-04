@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ch07/dom2.html</title>
+</head>
+
+<body>
+  <!-- <script>
+    document.forms.frm.fname.value;
+    document.querySelector('form[name="frm"]>input[name="fname"]').value;
+  </script> -->
+
+
+  <form name="frm" action="dom1.html">
+    first_name : <input type="text" name="fname" value="길동"><br>
+    last_name : <input type="text" name="lname" value="홍"><br>
+    phone : <input type="text" name="phone" value="010-5151-1212"><br>
+    age : <input type="number" name="age" value="22"><br>
+    <input type="hidden" name="member_id" value="">
+    <input type="submit" value="저장">
+    <input type="button" value="선택삭제">
+    <input type="button" value="변경" id="changeBtn" >
+  </form>
+  <hr>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>선택</th>
+        <th>member_id</th>
+        <th>first_name</th>
+        <th>last_name</th>
+        <th>phone</th>
+        <th>age</th>
+        <th>삭제</th>
+      </tr>
+    </thead>
+    <tbody id="list">
+    </tbody>
+  </table>
+
+  <script>
+    // 리스트 출력.
+    let memberList = [{
+      member_id: 1,
+        first_name: '임경',
+        last_name: '정',
+        phone: '010-1111-2222',
+        age: 20
+      }, {
+        member_id: 2,
+        first_name: '근형',
+        last_name: '박',
+        phone: '010-3333-4444',
+        age: 21
+      },
+      {
+        member_id: 3,
+        first_name: '진형',
+        last_name: '김',
+        phone: '010-5555-6666',
+        age: 22,
+      }
+    ];
+
+    // 페이지 로딩 될때 
+    memberList.forEach(member => {
+      let inValues = []; // [id, fn, ln, phone, age]
+      for (let field in member) {
+        inValues.push(member[field]);
+      }
+      makeRow(inValues);
+    });
+
+    // 선택삭제.
+    document.querySelector('form>input[type="button"]').addEventListener('click', delCheck);
+
+    function delCheck() {
+      let chkList = document.querySelectorAll('#list input[type="checkbox"]');
+      chkList.forEach(chk => {
+        if (chk.checked) {
+          chk.parentElement.parentElement.remove();
+        }
+      });
+    }
+
+    //변경버튼 클릭
+    document.querySelector('#changeBtn').addEventListener('click', function(){
+      //폼의 값으로 table.tbody 요소를 찾아서 변경.
+      let key = document.forms.frm.member_id.value; // id => 1,2,3
+      let tr = document.getElementById('member_'+key);
+      console.log(tr);
+      tr.children[5].innerText = document.forms.frm.age.value;
+      tr.children[4].innerText = document.forms.frm.phone.value;
+    })
+
+
+
+
+    // 입력추가.
+    document.forms.frm.onsubmit = function (ev) {
+      ev.preventDefault();
+      // 사용자 입력값.
+      let fn = this.fname.value;
+      let ln = this.lname.value;
+      let pn = this.phone.value;
+      let ag = this.age.value;
+      let inValues = [fn, ln, pn, ag];
+      // tr생성하는 함수 호출.
+      makeRow(inValues);
+    }
+
+    function makeRow(inValues=[]) {
+      // tr, td, input, button
+      let tr, td, chk, btn;
+      tr = document.createElement('tr')
+      tr.setAttribute('id', 'member_' + inValues[0]) //
+
+      tr.addEventListener('click', function(){ //tr 클릭시 정보를 위로 보내는(입력란으로) 작업
+        //td, td, td, td =>
+        // tr.children
+        //td fname, lname, phone, age
+        document.forms.frm.member_id.value = tr.children[1].innerHTML; 
+        document.forms.frm.fname.value = tr.children[2].innerHTML;
+        document.forms.frm.lname.value = tr.children[3].innerHTML;
+        document.forms.frm.phone.value = tr.children[4].innerHTML;
+        document.forms.frm.age.value = tr.children[5].innerHTML;
+      }, false); // true로 하면 상위요소에서 하위요소로 찾아감
+                // true로 하면 삭제버튼 클릭시 정보가 위로 올라감
+                // 우리는 안올라가게 하기 위해서 false로 바꿈 또는 디폴트값이 false라 true만 삭제해도 됨
+
+
+      inValues.forEach((val, ind) => {
+        if (ind == 0) { // 체크박스 생성.
+          td = document.createElement('td');
+          chk = document.createElement('input');
+          chk.setAttribute('type', 'checkbox'); // 속성, 속성값
+          td.append(chk);
+          tr.append(td);
+        }
+        td = document.createElement('td');
+        td.innerHTML = val;
+        tr.append(td);
+        if (ind == inValues.length - 1) { // 삭제버튼 생성.
+          td = document.createElement('td')
+          btn = document.createElement('button')
+
+          btn.addEventListener('click', (e) => {
+          e.stopPropagation(); //이벤트 전파 차단 눌렀을때 정보가 위로 올라갔는데 삭제를 눌러도 정보가 위로 올라가지 않는다.
+          e.target.parentElement.parentElement.remove()
+        }, true); // 디폴트값은 false : bubbling, ture: capturing
+
+          btn.innerText = '삭제'
+          td.append(btn);
+          tr.append(td);
+        }
+      });
+      // tr구조(<tr><td><input></td><td>fn</td>...</tr>)
+      document.getElementById('list').append(tr);
+    }
+  </script>
+</body>
+
+</html>

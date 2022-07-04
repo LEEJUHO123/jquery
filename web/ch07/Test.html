@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ch07/test.html</title>
+</head>
+
+<body>
+  <!-- <script>
+    document.forms.frm.fname.value;
+    document.querySelector('form[name="frm"]>input[name="fname"]').value;
+  </script> -->
+
+
+  <form name="frm" action="dom1.html">
+    도서코드 : <input type="text" name="code" value=""><br>
+    도서명 : <input type="text" name="book" value=""><br>
+    도서저자 : <input type="text" name="name" value=""><br>
+    도서출판사 : <input type="text" name="publisher" value=""><br>
+    도서금액 : <input type="number" name="money" value="">
+    <input type="submit" value="저장">
+    <input type="button" value="선택삭제">
+    
+  </form>
+  <hr>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>선택</th>
+        <th>도서코드</th>
+        <th>도서명</th>
+        <th>도서저자</th>
+        <th>도서출판사</th>
+        <th>도서가격</th>
+        <th>삭제</th>
+      </tr>
+    </thead>
+    <tbody id="list">
+    </tbody>
+  </table>
+
+  <script>
+    // 리스트 출력.
+    let memberList = [{
+      
+        code: 'B1234567',
+        book: '이것이 자바다',
+        name: '홍성문',
+        publisher: '출판사',
+        moeny : 20000
+      }, {
+        code: 'B1334567',
+        book: '이것이 문제다',
+        name: '홍문제',
+        publisher: '문제출판사',
+        moeny : 25000
+      }, {
+        code: 'B1238567',
+        book: '자바는어렵다',
+        name: '햄버거',
+        publisher: '가짜출판사',
+        moeny : 15000
+      }
+      
+    ];
+
+    // 페이지 로딩 될때 
+    memberList.forEach(member => {
+      let inValues = []; // [cd, bk, nam, pub, mon]
+      for (let field in member) {
+        inValues.push(member[field]);
+      }
+      makeRow(inValues);
+    });
+
+    // 선택삭제.
+    document.querySelector('form>input[type="button"]').addEventListener('click', delCheck);
+
+    function delCheck() {
+      let chkList = document.querySelectorAll('#list input[type="checkbox"]');
+      chkList.forEach(chk => {
+        if (chk.checked) {
+          chk.parentElement.parentElement.remove();
+        }
+      });
+    }
+
+   
+    // 입력추가.
+
+    // [cd, bk, nam, pub, mon]
+    
+    document.forms.frm.onsubmit = function (ev) {
+      ev.preventDefault();
+      
+      let cd = this.code.value;
+      let bk = this.book.value;
+      let nam = this.name.value;
+      let pub = this.publisher.value;
+      let mon = this.money.value;
+      let inValues = [cd, bk, nam, pub, mon];
+      
+      makeRow(inValues);
+    }
+
+    function makeRow(inValues=[]) {
+     
+      let tr, td, chk, btn;
+      tr = document.createElement('tr')
+      tr.setAttribute('id', 'member_' + inValues[0]) 
+
+      tr.addEventListener('click', function(){ 
+      
+        document.forms.frm.code.value = tr.children[1].innerHTML; 
+        document.forms.frm.book.value = tr.children[2].innerHTML;
+        document.forms.frm.name.value = tr.children[3].innerHTML;
+        document.forms.frm.publisher.value = tr.children[4].innerHTML;
+        document.forms.frm.money.value = tr.children[5].innerHTML;
+      }, false); 
+
+
+      inValues.forEach((val, ind) => {
+        if (ind == 0) { // 체크박스 생성.
+          td = document.createElement('td');
+          chk = document.createElement('input');
+          chk.setAttribute('type', 'checkbox'); // 속성, 속성값
+          td.append(chk);
+          tr.append(td);
+        }
+        td = document.createElement('td');
+        td.innerHTML = val;
+        tr.append(td);
+        if (ind == inValues.length - 1) { // 삭제버튼 생성.
+          td = document.createElement('td')
+          btn = document.createElement('button')
+
+          btn.addEventListener('click', (e) => {
+          e.stopPropagation(); 
+          e.target.parentElement.parentElement.remove()
+        }, true); 
+
+          btn.innerText = '삭제'
+          td.append(btn);
+          tr.append(td);
+        }
+      });
+      // tr구조(<tr><td><input></td><td>fn</td>...</tr>)
+      document.getElementById('list').append(tr);
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ch06/ajx3.html</title>
+</head>
+
+<body>
+  <input type="text" name="" id="searchCenter" value="서울특별시">
+  <button id="serachBtn">센터찾기</button>
+  <div id="show">
+    <script>
+
+      let dataAry
+      //페이지 로딩 될 때 실해오디는 부분.
+      let url = 'https://api.odcloud.kr/api/15077586/v1/centers?page=1&perPage=284&returnType=JSON&serviceKey=xgQiNM%2B6t%2Fl4vrV1hCwGiJALvAZcJ1%2BS%2Fb7JXdX9t8I1UZr8A1NIV0%2FX1VmLoNwTmNpqCVdGuJMaQxh85B%2F4YQ%3D%3D';
+      let xhtp = new XMLHttpRequest();
+      xhtp.open('GET', url); // url
+      xhtp.send();
+      xhtp.onreadystatechange = function () {
+        console.log('요청상태', xhtp.readyState, '서버상태', xhtp.status)
+        if (xhtp.readyState == 4 && xhtp.status == 200) {
+          let result = JSON.parse(xhtp.responseText);
+          console.log(result);
+          dataAry = result.data; //원본데이터. 284건
+          let fAry = dataAry.filter(center => {
+            let serachCenter = document.getElementById('searchCenter').value;
+            console.log(serachCenter);
+            return center.sido == serachCenter;
+          });
+          let table = document.createElement('table'); //table 생성
+          table.setAttribute('border', 1); // <table border = 1>
+          table.setAttribute('id', 'tbl');
+          table.append(makeHeader());
+          table.append(makeBody(fAry,1));
+          makePage(fAry);
+          
+          document.getElementById('show').append(table);
+          
+          // dataAry.forEach(elem => makeTr(elem));
+        }
+      } //client <---> server.
+
+      document.getElementById('serachBtn').addEventListener('click', function () {
+        
+        let fAry = dataAry.filter(center => {
+          let searchCenter = document.getElementById('searchCenter').value;
+          return center.sido == searchCenter;
+        });
+        document.getElementById('tbl').append(makeBody(fAry));
+      })
+
+      let fields = ['id', 'centerName', 'sido', 'zipCode', 'address', 'phoneNumber'];
+      //header.
+      function makeHeader() {
+        let thead = document.createElement('thead');
+        let tr = document.createElement('tr');
+        thead.append(tr); // <thead><tr></tr></thead>
+        fields.forEach(field => {
+          let th = document.createElement('th'); // <th>??</th>
+          th.innerText = field.toUpperCase();
+          tr.append(th);
+        });
+        return thead;
+      }
+      // body.
+      function makeBody(ary, page) {
+        //page => 1page : 1 ~ 10, 2page : 11 ~ 20, 3page : 21 ~ 30 
+        // index =>        0~9            10 ~ 19
+        // starCnt, endCnt; 1: (page-1)*10, (page)*10-1;
+        let startCnt = (page-1)*10;
+        let endCnt = (page)*10 -1;
+        //초기값 .서울 특별시
+        // dataAry.forEach(elem => makeTr(elem));
+        if (document.querySelector('#tbl>tbody') != null) {
+          document.querySelector('#tbl>tbody').remove();
+        };
+
+        let tbody = document.createElement('tbody');
+
+        ary.forEach((el,idx) => {
+          if(idx >= startCnt && idx <= endCnt)
+          tbody.append(makeTr(el));
+        });
+        
+        return tbody;
+      }
+      //tr.
+      function makeTr(obj) {
+        let tr = document.createElement('tr');
+        fields.forEach(field => {
+          let td = document.createElement('td');
+          if (field != 'address') {
+            td.innerText = obj[field];
+            // tr.append(td); 
+          } else if (field == 'address') {
+            let a = document.createElement('a');
+            a.setAttribute('href', `daumapp.html?centername=${obj.centerName}&xpos=${obj.lat}&ypos=${obj.lng}`);
+            a.setAttribute('target', '_black');
+            a.innerText = obj[field]
+            td.append(a);
+          }
+          tr.append(td);// <td>서울
+        })
+        return tr;
+      }
+
+      function makePage(ary){
+        //기존페이징 삭제
+        
+
+       let show = document.getElementById('show');
+        //ary = 12 : 1, 2 page, 20=>2, 21=>2.1
+        let totalPage = Math.ceil(ary.length / 10);
+        for(let i=1; i<=totalPage; i++){
+          let a = document.createElement('a');
+          a.addEventListener('click', function(e){
+            e.preventDefault(); //기본기능 차단.
+            let page = e.target.innerText;
+            document.getElementById('tbl').append(makeBody(ary, page));
+          })
+          a.innerHTML = i;
+          a.setAttribute('href', '#');
+          show.append(a);
+        }
+      }
+    </script>
+  </div>
+
+</body>
+
+</html>

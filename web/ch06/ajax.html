@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ch06/ajax.html</title>
+  <script>
+    let xhtp = new XMLHttpRequest();
+    xhtp.open('GET', 'ajax.txt'); // 서버 페이지 요청.
+    xhtp.send();
+    
+    xhtp.onload = function(){
+      let result = xhtp.responseText;
+      console.log();
+      document.write(result);
+    }
+  </script>
+</head>
+<body>
+  
+</body>
+</html>
